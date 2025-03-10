@@ -1,0 +1,260 @@
+.bg-light {
+    background-color: #f1f1f1 !important;
+}
+
+.sortable-list li {
+    margin-bottom: 6px;
+    border-top-width: 1px !important;
+    border-radius: 5px !important;
+    padding: 5px 10px;
+}
+
+.sortable-list li.unactive, .sortable-list li.unactive input {
+    color: #ccc;
+    border-style: dashed;
+}
+
+.sortable-list li input.column_name {
+    width: calc(100% - 50px);
+}
+
+.grag-icon {
+    cursor: grab;
+}
+
+.grag-icon:active {
+    cursor: grabbing;
+}
+
+.top-nav .nav-item a {
+    padding: 15px !important;
+}
+
+.top-nav .nav-item a.active, .top-nav .nav-item a:hover {
+    border-bottom: 3px solid;
+}
+
+.privacy-title {
+    color: #5c5f62c4;
+    font-size: 20px;
+}
+
+.privacy-header {
+    border: 1px solid #e0e4e4a6;
+    background-color: #eef9fb;
+    border-radius: 0 !important;
+    border-top: 3px solid #53bbbd;
+    color: #000000b8;
+}
+
+.privacy-header i {
+    border: 2px solid #00bcd473;
+    border-radius: 50%;
+    padding: 3px;
+}
+
+.w-17 {
+    width: 17px;
+}
+
+.h-17 {
+    height: 17px;
+}
+
+.w-20 {
+    width: 20px;
+}
+
+.h-20 {
+    height: 20px;
+}
+
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.fs-13px {
+    font-size: 13px;
+}
+
+.table td, .table th {
+    vertical-align: middle !important;
+    font-size: 13px !important;
+}
+
+input[type=checkbox], input[type=radio] {
+    height: 16px !important;
+    width: 16px !important;
+}
+
+.lh-0 {
+    line-height: 0 !important;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}
+
+.btn-group, .btn-group-vertical {
+    display: block !important;
+}
+
+#product_loader {
+    display: none;
+}
+
+#product_loader td {
+    background-color: #95bf47f0 !important;
+    border: none;
+    padding: 4px !important;
+    color: white !important;
+}
+
+.table tbody + tbody {
+    border-top: 1px solid #dee2e6 !important;
+}
+
+.hide {
+    display: none;
+}
+
+.form-label {
+    font-size: 14px !important;
+}
+
+div.dataTables_wrapper div.dataTables_filter input {
+    /* font-size: 11px; */
+}
+
+.dropdown-item {
+    font-size: 13px !important;
+}
+
+.btn-sm {
+    font-size: 12px !important;
+}
+
+.dropdown-toggle {
+    font-size: 13px !important;
+}
+
+.jconfirm.jconfirm-white .jconfirm-box .jconfirm-buttons button, .jconfirm.jconfirm-light .jconfirm-box .jconfirm-buttons button {
+    text-transform: capitalize !important;
+    font-size: 13px !important;
+    font-weight: normal !important;
+    text-shadow: none !important;
+}
+
+.jconfirm .jconfirm-box div.jconfirm-title-c .jconfirm-title {
+    font-size: 16px !important;
+    font-weight: bold !important;
+}
+
+.jconfirm .jconfirm-box div.jconfirm-content-pane .jconfirm-content {
+    font-size: 13px !important;
+}
+
+.btn-dark {
+    background-color: #303030 !important;
+    border-color: #212529 !important;
+}
+
+.link.active {
+    background-color: #607D8B !important;
+    border: 1px solid #9E9E9E !important;
+}
+
+.dataTables_length {
+    float: left !important;
+}
+
+div.dataTables_wrapper div.dataTables_length label,
+div.dataTables_wrapper div.dataTables_filter label {
+    font-size: 13px !important;
+}
+
+div.dataTables_wrapper div.dataTables_length select,
+div.dataTables_wrapper div.dataTables_filter input {
+    border: 1px solid #dee2e6 !important;
+}
+
+div.dataTables_wrapper div.dataTables_info {
+    font-size: 12px !important;
+    float: left !important;
+    margin-top: 15px !important;
+}
+
+.paging_simple_numbers a {
+    font-size: 13px !important;
+    background-color: black;
+    margin: 10px 5px;
+    padding: 1px 8px;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+.w-100px {
+    width: 100px !important;
+}
+
+.avatar {
+    width: 3.75rem;
+    padding: 0.25rem;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    max-width: 100%;
+    height: auto;
+}
+
+.remove-box {
+    position: absolute;
+    top: -14px;
+    right: -5px;
+    text-decoration: none;
+    color: white;
+    background-color: #303030;
+    height: 18px;
+    line-height: 10px;
+    width: 17px;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.avatar {
+    width: 50px !important;
+    height: 50px !important;
+}
+
+.img-circle {
+    border-radius: 100% !important;
+}
+
+.btn-sm {
+    padding: 5px 7px !important
+}
+
+.jconfirm .jconfirm-box .jconfirm-buttons button.btn-default {
+    background-color: black;
+    color: white !important;
+    text-shadow: none !important;
+    -webkit-transition: background .2s !important;
+    float: right !important;
+}
+.dropdown-toggle::after {
+    display: none !important;
+}
+.popover-body {
+    white-space: pre-line;
+}

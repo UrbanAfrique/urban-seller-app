@@ -1,0 +1,24 @@
+[19-Feb-2025 09:47:08 UTC] PHP Fatal error:  Uncaught Error: Class 'App\Enum\AbstractEnum' not found in /home/ebooking/public_html/urbanseller/app/Enum/FulfillmentStatusEnum.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/ebooking/public_html/urbanseller/app/Enum/FulfillmentStatusEnum.php on line 7
+[19-Feb-2025 09:50:55 UTC] PHP Fatal error:  Uncaught Error: Class 'App\Enum\AbstractEnum' not found in /home/ebooking/public_html/urbanseller/app/Enum/RouteTypeEnum.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/ebooking/public_html/urbanseller/app/Enum/RouteTypeEnum.php on line 7
+[19-Feb-2025 09:58:03 UTC] PHP Fatal error:  Uncaught Error: Class 'App\Enum\AbstractEnum' not found in /home/ebooking/public_html/urbanseller/app/Enum/TableEnum.php:8
+Stack trace:
+#0 {main}
+  thrown in /home/ebooking/public_html/urbanseller/app/Enum/TableEnum.php on line 8
+[20-Feb-2025 12:02:48 UTC] PHP Fatal error:  Uncaught Error: Class 'App\Enum\AbstractEnum' not found in /home/ebooking/public_html/urbanseller/app/Enum/ApprovedStatusEnum.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/ebooking/public_html/urbanseller/app/Enum/ApprovedStatusEnum.php on line 6
+[20-Feb-2025 12:25:16 UTC] PHP Fatal error:  Uncaught Error: Class 'App\Enum\AbstractEnum' not found in /home/ebooking/public_html/urbanseller/app/Enum/MethodEnum.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/ebooking/public_html/urbanseller/app/Enum/MethodEnum.php on line 6
+[20-Feb-2025 13:01:44 UTC] PHP Fatal error:  Uncaught Error: Class 'App\Enum\AbstractEnum' not found in /home/ebooking/public_html/urbanseller/app/Enum/RoleEnum.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/ebooking/public_html/urbanseller/app/Enum/RoleEnum.php on line 9

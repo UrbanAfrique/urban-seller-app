@@ -1,0 +1,156 @@
+
+@font-face {
+    font-family: 'Image Uploader Icons';
+    src: url(webfonts/iu.eot);
+    src: url(webfonts/iu.eot) format('embedded-opentype'), url(webfonts/iu.ttf) format('truetype'), url(webfonts/iu.woff) format('woff'), url(webfonts/iu.svg) format('svg');
+    font-weight: 400;
+    font-style: normal
+}
+
+[class*=iui-], [class^=iui-] {
+    font-family: 'Image Uploader Icons', serif !important;
+    speak: none;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale
+}
+
+.iui-close:before {
+    content: "\e900"
+}
+
+.iui-cloud-upload:before {
+    content: "\e901"
+}
+
+.image-uploader {
+    min-height: 123px;
+    border: none;
+    position: relative;
+    display: flex;
+}
+
+.image-uploader.drag-over {
+    background-color: #f3f3f3
+}
+
+.image-uploader input[type=file] {
+    width: 0;
+    height: 0;
+    position: absolute;
+    z-index: -1;
+    opacity: 0
+}
+
+.image-uploader .new-uploader {
+    border: 1px solid #0000001c;
+    cursor: pointer;
+    text-align: center !important;
+}
+.image-uploader .uploaded {
+    display: contents;
+}
+
+.image-uploader .uploaded .uploaded-image {
+    position: relative;
+    cursor: default;
+    border-radius: 4px;
+}
+
+.image-uploader .uploaded .uploaded-image img {
+    height: 140px;
+    width: 100% !important;
+    object-fit: cover;
+    border: 1px solid #e3e3e3;
+    border-radius: 3px;
+}
+
+.image-uploader .uploaded .uploaded-image .delete-image {
+    display: none;
+    cursor: pointer;
+    position: absolute;
+    top: .2rem;
+    right: .2rem;
+    border-radius: 50%;
+    padding: .3rem;
+    line-height: 1;
+    background-color: rgba(0, 0, 0, .5);
+    -webkit-appearance: none;
+    border: none
+}
+
+.image-uploader .uploaded .uploaded-image:hover .delete-image {
+    display: block
+}
+
+.image-uploader .uploaded .uploaded-image .delete-image i {
+    display: block;
+    color: #fff;
+    width: 1.4rem;
+    height: 1.4rem;
+    font-size: 1.4rem;
+    line-height: 1.4rem
+}
+
+@media screen and (max-width: 1366px) {
+    .image-uploader .uploaded .uploaded-image {
+        padding-bottom: 0;
+        height: 143px;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .image-uploader .uploaded {
+        padding: .4rem
+    }
+
+    .image-uploader .uploaded .uploaded-image {
+        width: calc(25% - .8rem);
+        padding-bottom: calc(25% - .4rem);
+        margin: .4rem
+    }
+}
+
+@media screen and (max-width: 786px) {
+    .image-uploader .uploaded {
+        padding: .3rem
+    }
+
+    .image-uploader .uploaded .uploaded-image {
+        width: calc(33.3333333333% - .6rem);
+        padding-bottom: calc(33.3333333333% - .3rem);
+        margin: .3rem
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .image-uploader .uploaded {
+        padding: .2rem
+    }
+
+    .image-uploader .uploaded .uploaded-image {
+        width: calc(50% - .4rem);
+        padding-bottom: calc(50% - .4rem);
+        margin: .2rem
+    }
+}
+
+/*Grid System*/
+.m-drop-row {
+    width: 100% !important;
+}
+
+.m-drop-row:before {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.m-drop-row .m-drop-col {
+    float: left;
+    margin:5px;
+}

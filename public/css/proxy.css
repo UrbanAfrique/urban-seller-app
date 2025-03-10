@@ -1,0 +1,62 @@
+.remove-box {
+    position: absolute;
+    right: -7px;
+    top: -10px;
+    background-color: #c8011f;
+    padding: 5px;
+    border-radius: 100%;
+    line-height: 11px;
+    color: white;
+    font-weight: bold;
+}
+
+.btn-seller-reg {
+    margin-bottom: 15px;
+    padding: 16px;
+    font-size: 16px;
+}
+
+.vi-pament-methods li {
+    display: flex;
+    align-items: flex-start;
+    padding: 16px;
+}
+
+.vi-pament-methods li img {
+    width: 35px;
+    height: auto;
+    margin: 5px 0 0 12px;
+}
+
+.vi-pymnt-head {
+    margin-bottom: 8px;
+    color: gray;
+    font-size: 14px;
+}
+ul.pyout-points li:before {
+    content: "";
+    width: 4px;
+    height: 4px;
+    background: #cdcaca;
+    border-radius: 7px;
+    position: relative;
+    left: -10px;
+    top: 7px;
+}
+ul.pyout-points li {
+    padding-left: 12px;
+}
+.vi-pament-methods li .w3-radio {
+    width: 15px;
+    height: 15px;
+}
+.payout-form {
+    display: none;
+}
+.payout-form.bank .w3-col label {
+    margin-bottom: 2px;
+    font-size: 14px;
+}
+.payout-form.bank .w3-col {
+    padding-bottom: 0;
+}
