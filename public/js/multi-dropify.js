@@ -27,7 +27,7 @@
         };
         let dataTransfer = new DataTransfer();
         let createContainer = function () {
-            let $container = $('<div>', {class: 'image-uploader'}),
+            let $container = $('<div>', { class: 'image-uploader' }),
                 $input = $('<input>', {
                     type: 'file',
                     id: plugin.settings.imagesInputName + '-' + random(),
@@ -35,12 +35,12 @@
                     multiple: '',
                     accept: "image/*"
                 }).appendTo($container),
-                $uploadedContainer = $('<div>', {class: 'uploaded'}).appendTo($container),
-                $row = $('<div>', {class: 'm-drop-row'}).appendTo($uploadedContainer);
+                $uploadedContainer = $('<div>', { class: 'uploaded' }).appendTo($container),
+                $row = $('<div>', { class: 'm-drop-row' }).appendTo($uploadedContainer);
             $textContainer = $('<div>', {
                 class: 'new-uploader m-drop-col'
             }).appendTo($row),
-                $span = $('<img style="height:140px;" src="https://mvs.britcar-uk.co.uk/public/images/camera-photo.png" alt="">').appendTo($textContainer);
+                $span = $('<img style="height:80px;" src="https://pixsector.com/cache/517d8be6/av5c8336583e291842624.png" alt="">').appendTo($textContainer);
             $container.on('click', function (e) {
                 prevent(e);
                 $input.trigger('click');
@@ -59,10 +59,10 @@
         };
 
         let createImg = function (src, id) {
-            let $container = $('<div>', {class: 'uploaded-image m-drop-col'}),
-                $img = $('<img>', {src: src}).appendTo($container),
-                $button = $('<button>', {class: 'delete-image'}).appendTo($container),
-                $i = $('<i>', {class: 'fa fa-times', text: ''}).appendTo($button);
+            let $container = $('<div>', { class: 'uploaded-image m-drop-col' }),
+                $img = $('<img>', { src: src }).appendTo($container),
+                $button = $('<button>', { class: 'delete-image' }).appendTo($container),
+                $i = $('<i>', { class: 'fa fa-times', text: '' }).appendTo($button);
             if (plugin.settings.preloaded.length) {
                 $container.attr('data-preloaded', true);
                 let $preloaded = $('<input>', {
@@ -104,23 +104,74 @@
             }
         };
 
+        let allowedExtensions = ["image/webp"];
+
         let fileSelectHandler = function (e) {
             prevent(e);
             let $container = $(this);
             $container.removeClass('drag-over');
             let files = e.target.files || e.originalEvent.dataTransfer.files;
-            setPreview($container, files);
+
+            // Validate each file
+            let validFiles = [];
+            $(files).each(function (i, file) {
+                if (!allowedExtensions.includes(file.type)) {
+                    $.confirm({
+                        title: 'Upload image',
+                        content: 'Only WebP files are allowed.',
+                        buttons: {
+                            cancel: {
+                                text: 'Cancel',
+                                action: function () { }
+                            }
+                        }
+                    });
+                } else {
+                    validFiles.push(file);
+                }
+            });
+
+            if (validFiles.length > 0) {
+                setPreview($container, validFiles);
+            }
         };
+
         let setPreview = function ($container, files) {
             $container.addClass('has-files');
             let $uploadedContainer = $container.find('.uploaded'),
                 $input = $container.find('input[type="file"]');
+
             $(files).each(function (i, file) {
-                dataTransfer.items.add(file);
-                $uploadedContainer.find(".m-drop-row").prepend(createImg(URL.createObjectURL(file), dataTransfer.items.length - 1));
+                let reader = new FileReader();
+                reader.onload = function (event) {
+                    let img = new Image();
+                    img.onload = function () {
+                        let maxWidth = 2048; // Max width
+                        let maxHeight = 2048; // Max height
+
+                        if (img.width != maxWidth || img.height != maxHeight) {
+                            $.confirm({
+                                title: 'Upload image',
+                                content: 'Dimensions should not exceed 2048x2048 pixels.',
+                                buttons: {
+                                    cancel: {
+                                        text: 'Cancel',
+                                        action: function () { }
+                                    }
+                                }
+                            });
+                        } else {
+                            dataTransfer.items.add(file);
+                            $uploadedContainer.find(".m-drop-row").prepend(createImg(URL.createObjectURL(file), dataTransfer.items.length - 1));
+                            $input.prop('files', dataTransfer.files);
+                        }
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
             });
-            $input.prop('files', dataTransfer.files);
         };
+
         let random = function () {
             return Date.now() + Math.floor((Math.random() * 100) + 1);
         };

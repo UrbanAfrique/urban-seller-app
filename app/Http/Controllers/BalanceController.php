@@ -130,8 +130,7 @@ class BalanceController extends Controller
         return response()->json(['success' => true]);
     }
 
-
-    public function withdraws()
+    public function withdraws(Request $request)
     {
         $data = [
             'pageTitle' => 'Withdraw Requests',
@@ -139,7 +138,9 @@ class BalanceController extends Controller
         ];
         $data['transactions'] = Transaction::whereHas('vendor')
             ->where('type', TransactionTypeEnum::WITHDRAWAL)
-            ->orderBy('id', 'DESC')->get();
+            ->orderBy('id', 'DESC')
+            ->paginate(10)
+            ->appends($request->query());
 
         return view('app.vendors.withdraws', $data);
     }

@@ -58,7 +58,7 @@ class HomeController extends Controller
                     ));
                 }
             } else {
-                $return_url = 'https://admin.shopify.com/store/' . $store . "/apps/" . env('SHOPIFY_APP_NAME');
+                $return_url = 'https://admin.shopify.com/store/' . $store . "/apps/" . config('services.shopify.app_name');
                 header("Location: " . $return_url);
                 die();
             }
@@ -78,7 +78,7 @@ class HomeController extends Controller
     {
         $domain = $request->get('shop', null);
         $hMac = $request->get('hmac', null);
-        $install_url = "https://" . $domain . "/admin/oauth/authorize?client_id=" . env('SHOPIFY_API_KEY') . "&scope=" . trim(env('SHOPIFY_SCOPES')) . "&redirect_uri=" . urlencode(route('app.token'));
+        $install_url = "https://" . $domain . "/admin/oauth/authorize?client_id=" . config('services.shopify.api_key') . "&scope=" . trim(config('services.shopify.scopes')) . "&redirect_uri=" . urlencode(route('app.token'));
         Seller::updateOrCreate([
             'domain' => $domain
         ], [
@@ -95,7 +95,7 @@ class HomeController extends Controller
         $code = $_GET['code'];
         $params = array_diff_key((array)$params, array('hmac' => ''));
         ksort($params);
-        $computed_hmac = hash_hmac('sha256', http_build_query($params), env('SHOPIFY_API_SECRET'));
+        $computed_hmac = hash_hmac('sha256', http_build_query($params),  config('services.shopify.api_secret'));
         if (hash_equals($hmac, $computed_hmac)) {
             $domain = $request->query('shop', null);
             $result = $this->getAccessToken($domain, $code);
@@ -112,7 +112,7 @@ class HomeController extends Controller
             // Artisan::call('sync:custom-collections');
             // Artisan::call('sync:customers');
 
-            $return_url = 'https://' . $domain . "/admin/apps/" . env('SHOPIFY_APP_NAME');
+            $return_url = 'https://' . $domain . "/admin/apps/" .  config('services.shopify.app_name');
             header("Location: " . $return_url);
             die();
         } else {
@@ -123,8 +123,8 @@ class HomeController extends Controller
     public function getAccessToken($shop, $code)
     {
         $query = array(
-            "client_id" => env('SHOPIFY_API_KEY'),
-            "client_secret" => env('SHOPIFY_API_SECRET'),
+            "client_id" => config('services.shopify.api_key'),
+            "client_secret" => config('services.shopify.api_secret'),
             "code" => $code
         );
         $access_token_url = "https://" . $shop . "/admin/oauth/access_token";

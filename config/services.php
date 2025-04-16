@@ -34,5 +34,10 @@ return [
       'key' => env('STRIPE_KEY'),
       'secret' => env('STRIPE_SECRET'),
     ],
-
+    'shopify' => [
+        'app_name' => env('SHOPIFY_APP_NAME'),
+        'api_key' => env('SHOPIFY_API_KEY'),
+        'api_secret' => env('SHOPIFY_API_SECRET'),
+        'scopes' => env('SHOPIFY_SCOPES'),
+    ],
 ];

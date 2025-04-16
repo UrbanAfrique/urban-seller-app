@@ -13,12 +13,13 @@ use Laravel\Cashier\Cashier;
 use \Stripe\Stripe;
 use App\Services\CustomerService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Mail;
 
 class PlanController extends Controller
 {
     use General;
     
-    public function createByProxy(Request $request){
+    public function createByProxy(Request $request){        
         $customerId = $request->get('customerId');
         $customer = CustomerService::findById($customerId);
         
@@ -46,6 +47,7 @@ class PlanController extends Controller
             'planId'=>$planId,
             'intent' => $customer->createSetupIntent()
         ];
+        
         return response(view('proxy.payout', $data))->header('Content-Type', 'application/liquid');
     }
     

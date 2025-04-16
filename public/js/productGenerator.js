@@ -267,7 +267,7 @@ const productGenerator = {
             <a class="remove-box" onclick="productGenerator.removeOption(${productGenerator.currentTotalOptions})">x</a>
             <label class="${labelClass}">Option Name</label>
             <input name="options[]" class="${inputClass}" style="padding-left: 10px;" name="option[${productGenerator.currentTotalOptions}]">
-            <div class="${productGenerator.type === 'app' ? 'my-2' : 'w3-margin-bottom'} cOptionValue">
+            <div class="${productGenerator.type === 'app' ? 'my-2' : 'w3-margin-bottom w3-margin-top'} cOptionValue">
                 <label class="${labelClass}">Option Values</label>
                 <input type="text" class="${inputClass} tagify tagi-${productGenerator.currentTotalOptions}" placeholder="Enter Comma Values.." data-id="${productGenerator.currentTotalOptions}">
             </div>
@@ -504,21 +504,20 @@ const productGenerator = {
             imagesInputName: 'mFiles',
             preloaded: preloaded,
             preloadedInputName: 'oldFiles',
-            maxSize: 2 * 1024 * 1024
+            Size: 2 * 1024 * 1024
         });
     },
     createOrUpdateProxyVendor: function (cElement, type = 'create') {
-        // console.log('submitted'); return false;
-        let cForm = $(cElement);
-        let url = cForm.attr('action');
-        let formData = new FormData(cForm[0]);
-        productGenerator.showWait();
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: formData,
-            contentType: false,
-            processData: false,
+    let cForm = $(cElement);
+    let url = cForm.attr('action').replace('http://', 'https://');
+    let formData = new FormData(cForm[0]);
+    productGenerator.showWait();
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: formData,
+        contentType: false,
+        processData: false,
             success: function (result) {
                 productGenerator.hideWait();
                 if (result.success === true) {

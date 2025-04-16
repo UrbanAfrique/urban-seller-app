@@ -10,6 +10,7 @@ use App\Enum\TableEnum;
 use App\Enum\VendorStatusEnum;
 use App\Mail\VendorApproval;
 use App\Mail\VendorRegister;
+use App\Mail\AdminNotification;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Transaction;
@@ -28,7 +29,7 @@ use Illuminate\Validation\Rule;
 class VendorController extends Controller
 {
     use General;
-    
+
     public function proxyDashboard()
     {
         $data = $this->getProxyData();
@@ -43,7 +44,7 @@ class VendorController extends Controller
             return response(view('proxy.vendors.rejected', $data))->header('Content-Type', 'application/liquid');
         } else if (!$customer->subscribed('default')) {
             return redirect()->to('https://' . $seller->shop_domain . '/a/seller/plan/payout-create?customerId=' . $customer->id);
-        } 
+        }
         $data['pageTitle'] = __('general.dashboard');
         $data['total_products'] = Product::whereVendorId($vendor->id)->count();
         $data['approved_products'] = Product::whereVendorId($vendor->id)->whereApproved(ApprovedStatusEnum::APPROVED)->count();
@@ -62,10 +63,14 @@ class VendorController extends Controller
     {
         $seller = SellerService::getSeller();
         // echo $seller->token;
-        $vendors = Vendor::where('seller_id', SellerService::getSellerId())->orderBy('id', 'DESC')->paginate(10);
+        $vendors = Vendor::where('seller_id', SellerService::getSellerId())
+            ->orderBy('id', 'DESC')
+            ->paginate(10)
+            ->appends($request->query());
         // file_put_contents('vendors.txt', count($vendors));
         $pageTitle = "Vendors";
         $routeType = RouteTypeEnum::VENDOR;
+
         return view('app.vendors.index', compact(
             'pageTitle',
             'routeType',
@@ -137,7 +142,11 @@ class VendorController extends Controller
                 }
             }
         }
-        Mail::to($vendor->email)->send(new VendorRegister($vendor));
+
+        // Mail::to($vendor->email)->send(new VendorRegister($vendor));
+
+        Mail::to('lamarwane998@gmail.com')->send(new AdminNotification($vendor));
+
         return response()->json([
             'success' => true,
             'customer' => $customer

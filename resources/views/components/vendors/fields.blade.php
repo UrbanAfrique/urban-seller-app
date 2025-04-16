@@ -1,4 +1,3 @@
-
 @php
     $customerName ='';
     $defaultAddress = isset($customer)?$customer->default_address : [];
@@ -24,7 +23,7 @@
 </div>
 <div class="w3-col s6  w3-margin-bottom">
     {!! Html::decode(Form::label('phone',trans('general.phone')."<span style='color:red;'>*</span>")) !!}
-    {!! Form::text('phone',$customer->phone ?? $defaultAddress['phone'] ?? '',['class'=>'w3-input w3-border','id'=>'phone','required']) !!}
+    {!! Form::text('phone',$vendor->phone ?? $defaultAddress['phone'] ?? '',['class'=>'w3-input w3-border','id'=>'phone','required']) !!}
 </div>
 <div class="w3-col s6  w3-margin-bottom">
     {!! Form::label('domain',trans('general.domain')) !!}
@@ -40,25 +39,25 @@
 </div>
 <div class="w3-col s12  w3-margin-bottom">
     {!! Html::decode(Form::label('country',trans('general.country')."<span style='color:red;'>*</span>")) !!}
-    {!! Form::select('country',\App\Services\LocationService::countryDropdown(),$defaultAddress['country_code'] ??'',['class'=>'w3-input w3-border','id'=>'country','placeholder'=>'__select__','required']) !!}
+    {!! Form::select('country',\App\Services\LocationService::countryDropdown(),$vendor->country ?? $defaultAddress['country_code'] ??'',['class'=>'w3-input w3-border','id'=>'country','placeholder'=>'__select__','required']) !!}
 </div>
 <div class="w3-col s4  w3-margin-bottom">
     {!! Html::decode(Form::label('province',trans('general.province')."<span style='color:red;'>*</span>")) !!}
-    {!! Form::text('province',$defaultAddress['province']??'',['class'=>'w3-input w3-border','id'=>'province','required']) !!}
+    {!! Form::text('province',$vendor->province ?? $defaultAddress['province']??'',['class'=>'w3-input w3-border','id'=>'province','required']) !!}
 </div>
 <div class="w3-col s4  w3-margin-bottom">
     {!! Html::decode(Form::label('city',trans('general.city')."<span style='color:red;'>*</span>")) !!}
-    {!! Form::text('city',$defaultAddress['city']??'',['class'=>'w3-input w3-border','id'=>'city','required']) !!}
+    {!! Form::text('city',$vendor->city ?? $defaultAddress['city']??'',['class'=>'w3-input w3-border','id'=>'city','required']) !!}
 </div>
 <div class="w3-col s4  w3-margin-bottom">
     {!! Form::label('zip',trans('general.zip')) !!}
-    {!! Form::text('zip',$defaultAddress['zip']??'',['class'=>'w3-input w3-border','id'=>'zip']) !!}
+    {!! Form::text('zip',$vendor->zip ?? $defaultAddress['zip']??'',['class'=>'w3-input w3-border','id'=>'zip']) !!}
 </div>
 <div class="w3-col s6  w3-margin-bottom">
     {!! Html::decode(Form::label('address1',trans('general.address1')."<span style='color:red;'>*</span>")) !!}
-    {!! Form::text('address1',$defaultAddress['address1']??'',['class'=>'w3-input w3-border','id'=>'address1','required']) !!}
+    {!! Form::text('address1',$vendor->address1 ?? $defaultAddress['address1']??'',['class'=>'w3-input w3-border','id'=>'address1','required']) !!}
 </div>
 <div class="w3-col s6  w3-margin-bottom">
     {!! Form::label('address2',trans('general.address2')) !!}
-    {!! Form::text('address2',$defaultAddress['address2']??'',['class'=>'w3-input w3-border','id'=>'address2']) !!}
+    {!! Form::text('address2',$vendor->address2 ?? $defaultAddress['address2']??'',['class'=>'w3-input w3-border','id'=>'address2']) !!}
 </div>

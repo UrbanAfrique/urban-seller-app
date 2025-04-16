@@ -6,12 +6,12 @@
     {!! Form::hidden('vendor_id',$vendor->id) !!}
     {!! Form::hidden('seller_id',$seller->id) !!}
     <div class="w3-row w3-padding">
-        <div class="w3-col s8">
+        <div class="w3-col s12 m8 l8">
             @include('components.products.edit.basic-info',['type'=>'proxy'])
             @include('components.products.edit.media',['type'=>'proxy'])
             @include('components.products.edit.variants',['type'=>'proxy'])
         </div>
-        <div class="w3-col s4">
+        <div class="w3-col s12 m4 l4">
             @include('components.products.edit.status-type',['type'=>'proxy'])
             @if(isset($isDefaultVariant) AND $isDefaultVariant)
                 @include('components.products.edit.pricing-shipping',['type'=>'proxy'])

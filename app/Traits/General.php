@@ -73,8 +73,8 @@ trait General
         $data = [
             'seller' => $seller,
             'customerId' => $customerId,
-            'domain' =>  $domain,
-            'shop_domain' =>  $domain,
+            'domain' => $domain,
+            'shop_domain' => $domain,
             'routeName' => $routeName, 
             'proxy' => !empty($proxy)
         ];

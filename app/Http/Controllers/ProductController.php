@@ -70,12 +70,12 @@ class   ProductController extends Controller
                     $query->where('vendor_type', VendorTypeEnum::VENDOR);
                 })
                 ->where('vendor_id', $params['vendor']->id)
-                ->paginate(20)
+                ->paginate(10)
                 ->appends(request()->query());
             $params['products'] = $products;
             return response(view('proxy.products.index', $params))->header('Content-Type', 'application/liquid');
         } else {
-            $params['products'] = $products->paginate(20)->appends(request()->query());
+            $params['products'] = $products->paginate(10)->appends(request()->query());
             return \view('app.products.index', $params);
         }
     }

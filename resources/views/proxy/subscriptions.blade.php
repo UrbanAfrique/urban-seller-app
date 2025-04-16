@@ -1,18 +1,25 @@
 @extends('layouts.proxy')
 @section('content')
- @include('components.proxy-header',['type'=>'subscription'])
+    <style>
+        .table th,
+        .table td {
+            padding: 10px;
+        }
+    </style>
+
+    @include('components.proxy-header', ['type' => 'subscription'])
     <div class="w3-row w3-padding">
-        @include('components.global-proxy-search',['searchRoute'=>'/a/seller/plan/subscriptions'])
+        @include('components.global-proxy-search', ['searchRoute' => '/a/seller/plan/subscriptions'])
         <div class="w3-col s12">
-            <table class=" w3-table w3-bordered  ">
-                <thead>
-                <tr>
-                    <th>Status</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Plan Amount</th>
-                    <th>Remaining Days</th>
-                </tr>
+            <table class="w3-table w3-bordered w3-striped w3-hover w3-card">
+                <thead class="w3-light-grey">
+                    <tr>
+                        <th>Status</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Plan Amount</th>
+                        <th>Remaining Days</th>
+                    </tr>
                 </thead>
                 <tbody>
                     @forelse($subscriptions->data as $subscription)
@@ -27,13 +34,15 @@
                             <td>
                                 ${{ number_format($subscription->plan->amount / 100, 2) }}
                             </td>
-                             <td>
-                            @php
-                                $expireDate = \Carbon\Carbon::createFromTimestamp($subscription->current_period_end);
-                                $remainingDays = now()->diffInDays($expireDate, false);
-                            @endphp
-                            {{ $remainingDays > 0 ? $remainingDays . ' days remaining' : 'Expired' }}
-                        </td>
+                            <td>
+                                @php
+                                    $expireDate = \Carbon\Carbon::createFromTimestamp(
+                                        $subscription->current_period_end,
+                                    );
+                                    $remainingDays = now()->diffInDays($expireDate, false);
+                                @endphp
+                                {{ $remainingDays > 0 ? $remainingDays . ' days remaining' : 'Expired' }}
+                            </td>
                         </tr>
                     @empty
                         <tr>
@@ -42,9 +51,9 @@
                             </td>
                         </tr>
                     @endforelse
-                    
+
                 </tbody>
-                </table>
+            </table>
         </div>
     </div>
 @endsection

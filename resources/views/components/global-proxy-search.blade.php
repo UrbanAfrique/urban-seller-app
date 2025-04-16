@@ -1,5 +1,5 @@
-<div class="w3-col s12 w3-margin-bottom">
-    <form action="{{$searchRoute}}" class="w3-right w3-d-flex w3-margin-bottom">
+<div class="w3-col s12 w3-margin-bottom w3-margin-top">
+    <form action="{{$searchRoute}}" class="w3-right w3-d-flex w3-margin-bottom w3-margin-top">
         <input
             name="s"
             value="{{ request()->query('s') }}"

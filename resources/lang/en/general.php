@@ -13,7 +13,7 @@ return [
     'order_detail' => 'More details',
     'powered_by' => 'Powered By',
 
-    'site_name' => 'Urber Seller',
+    'site_name' => 'Urban Seller',
     'approved' => 'Approved',
     'pending' => 'Pending',
     'rejected' => 'Rejected',

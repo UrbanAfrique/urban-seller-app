@@ -28,7 +28,7 @@ class OrderController extends Controller
             $params['orders'] = OrderService::getVendorOrderListing($vendorId);
             return response(view('proxy.orders.index', $params))->header('Content-Type', 'application/liquid');
         } else {
-            $orders = Order::orderBy('id', 'DESC')->paginate(20);
+            $orders = Order::orderBy('id', 'DESC')->paginate(10)->appends(request()->query());
             $params['orders'] = $orders;
             return view('app.orders.index', $params);
         }
