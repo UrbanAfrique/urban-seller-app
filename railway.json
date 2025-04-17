@@ -1,0 +1,14 @@
+{
+  "build": {
+    "env": {
+      "APP_ENV": "production",
+      "APP_KEY": "base64:o2Oaw4D1zakePflkKQLR/rjZWlABt8ZLIHl9dDeej/4=",
+      "APP_DEBUG": "false"
+    }
+  },
+  "deploy": {
+    "start": {
+      "command": "php artisan serve --host=0.0.0.0 --port=${PORT}"
+    }
+  }
+}
