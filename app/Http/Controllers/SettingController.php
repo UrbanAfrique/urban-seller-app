@@ -16,6 +16,7 @@ class SettingController extends Controller
         $routeType = RouteTypeEnum::SETTING;
         $pageTitle = 'Manage Settings';
         $setting = $seller->setting;
+        dd($setting);
         return \view('app.settings.index', compact(
             'routeType',
             'setting',
