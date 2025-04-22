@@ -25,7 +25,7 @@
                 <i class="fa fa-user w3-margin-right"></i> {{ ucwords(trans('general.manage_profile')) }}
             </a>
         @endif
-        <a class="w3-bar-usd w3-button w3-padding @if ($routeName == 'proxy.balance.index') w3-text-teal @endif"
+        <a class="w3-bar-item w3-button w3-padding @if ($routeName == 'proxy.balance.index') w3-text-teal @endif"
             href="/a/seller/balance">
             <i class="fa fa-usd w3-margin-right"></i> {{ ucwords(trans('general.balance')) }}
         </a>
