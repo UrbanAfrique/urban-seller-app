@@ -1,6 +1,6 @@
 @extends('layouts.proxy')
 @section('content')
-    <div class="w3-card-4">
+    <div class="">
         @include('components.proxy-header',['type'=>'uProfile'])
         {!! Form::open(['url' => route('proxy.account.update', $vendor->id), 'enctype' => 'multipart/form-data', 'onsubmit' => 'productGenerator.createOrUpdateProxyVendor(this,"update");return false;']) !!}
         <div class="w3-row-padding">
