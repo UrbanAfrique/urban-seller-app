@@ -34,9 +34,6 @@ RUN a2enmod rewrite
 # Set ServerName to suppress Apache warning
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# Configure Apache to serve files from the public directory
-COPY ./000-default.conf /etc/apache2/sites-available/000-default.conf
-
 # Expose port 80 for Apache
 EXPOSE 80
 
