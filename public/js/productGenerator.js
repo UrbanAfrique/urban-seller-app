@@ -530,7 +530,7 @@ const productGenerator = {
                         if (cForm.find('btn-seller-reg').length) {
                             cForm.find('btn-seller-reg').val('redirecting...').prop('disabled', true);
                         }
-                        location.assign('/account/login?return_url=/a/seller');
+                        location.assign('/login?return_url=/a/seller');
                     } else {
                         productGenerator.showSuccess("Vendor Updated Successfully");
                     }
