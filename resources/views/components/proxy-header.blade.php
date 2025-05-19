@@ -7,7 +7,7 @@
         <div class="w3-col s6 w3-text-right">
             @if(isset($type) AND $type=='cVendor')
                 {{ trans('general.if_already_vendor') }}
-                <a href="/login?return_url=/a/seller/account" class="w3-button w3-black">
+                <a href="/account/login?return_url=/a/seller/account" class="w3-button w3-black">
                     {{ trans('general.login') }}
                 </a>
             @endif

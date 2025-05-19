@@ -118,7 +118,7 @@
                         'class' => 'w3-btn w3-blue w3-round-xxlarge w3-block btn-seller-reg w3-padding',
                     ]) !!}
                     <p class="w3-text-grey">{{ trans('general.if_already_vendor') }}</p>
-                    <a href="/login?return_url=/a/seller/account" style="margin-top:10px"
+                    <a href="/account/login?return_url=/a/seller/account" style="margin-top:10px"
                         class="w3-btn w3-green w3-round-xxlarge">{{ trans('general.login') }}</a>
                 </div>
             </div>
