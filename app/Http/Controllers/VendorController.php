@@ -93,15 +93,11 @@ class VendorController extends Controller
     }
     public function storeByProxy(Request $request): JsonResponse
     {
-        Log::info('storeByProxy called', ['request' => $request->all()]);
+        Log::debug('🟡 Received storeByProxy request', $request->all());
 
         $seller_id = $request->input('seller_id');
         $seller = SellerService::findById($seller_id);
-
-        if (!$seller) {
-            Log::error("Seller not found", ['seller_id' => $seller_id]);
-            return response()->json(['error' => 'Seller not found'], 404);
-        }
+        Log::debug("🔵 Seller fetched", ['seller_id' => $seller_id, 'seller' => $seller]);
 
         $rules = [
             'email' => [
@@ -120,74 +116,61 @@ class VendorController extends Controller
         }
 
         $validator = Validator::make($request->all(), $rules);
+
         if ($validator->fails()) {
-            Log::warning('Validation failed', ['errors' => $validator->errors()]);
+            Log::warning('🟥 Validation failed', $validator->errors()->toArray());
             return response()->json(['errors' => $validator->errors()]);
         }
 
-        try {
-            if ($request->has('customer_id')) {
-                Log::info('Updating existing proxy vendor');
+        if ($request->has('customer_id')) {
+            Log::debug('🟢 Updating existing vendor via customer_id');
+            $vendor = VendorService::updateProxyVendor();
+        } else {
+            Log::debug('🟠 Creating new Shopify customer');
+            $customerRequest = ShopifyService::call(
+                $seller->token,
+                $seller->domain,
+                ShopifyEndPointEnum::CUSTOMERS,
+                CustomerService::getCustomerQuery(),
+                MethodEnum::POST
+            );
+
+            $customerResponse = json_decode($customerRequest['response'], true);
+            Log::debug('🧾 Shopify response', $customerResponse);
+
+            if (isset($customerResponse['customer'])) {
+                $apiCustomer = $customerResponse['customer'];
+                $apiCustomer['phone'] = request()->input('phone');
+                $customer = CustomerService::manage($seller, $apiCustomer);
+                Log::debug('✅ Customer created or managed', ['customer' => $customer]);
+
                 $vendor = VendorService::updateProxyVendor();
+                $vendor->customer_id = $customer->id;
+
+                if ($seller->setting->vendor_auto_approval) {
+                    $vendor->approved = ApprovedStatusEnum::APPROVED;
+                }
+
+                $vendor->save();
+                Log::info('✅ Vendor saved', ['vendor' => $vendor]);
             } else {
-                Log::info('Creating new customer in Shopify');
-
-                $customerRequest = ShopifyService::call(
-                    $seller->token,
-                    $seller->domain,
-                    ShopifyEndPointEnum::CUSTOMERS,
-                    CustomerService::getCustomerQuery(),
-                    MethodEnum::POST
-                );
-
-                Log::debug('Shopify response', ['response' => $customerRequest]);
-
-                $customerResponse = json_decode($customerRequest['response'], true);
-
-                if (isset($customerResponse['customer'])) {
-                    $apiCustomer = $customerResponse['customer'];
-                    $apiCustomer['phone'] = $request->input('phone');
-
-                    $customer = CustomerService::manage($seller, $apiCustomer);
-
-                    $vendor = VendorService::updateProxyVendor();
-                    $vendor->customer_id = $customer->id;
-
-                    if ($seller->setting->vendor_auto_approval) {
-                        $vendor->approved = ApprovedStatusEnum::APPROVED;
-                    }
-
-                    $vendor->save();
-
-                    Log::info('Vendor created successfully', ['vendor_id' => $vendor->id]);
-                } else {
-                    Log::error('Shopify customer creation failed', ['response' => $customerResponse]);
-
+                if (isset($customerResponse['errors'])) {
+                    Log::error('❌ Shopify customer creation failed', $customerResponse['errors']);
                     return response()->json([
                         'success' => false,
-                        'errors' => $customerResponse['errors'] ?? ['Unknown error from Shopify']
+                        'errors' => $customerResponse['errors']
                     ]);
                 }
             }
-
-            // Mail::to($vendor->email)->send(new VendorRegister($vendor));
-            Mail::to('lamarwane998@gmail.com')->send(new AdminNotification($vendor));
-
-            return response()->json([
-                'success' => true,
-                'customer' => $customer ?? null
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Exception in storeByProxy', [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-
-            return response()->json([
-                'success' => false,
-                'error' => 'An unexpected error occurred. Check logs for details.'
-            ], 500);
         }
+
+        // Log::info('📩 Sending email to vendor and admin');
+        Mail::to('lamarwane998@gmail.com')->send(new AdminNotification($vendor));
+
+        return response()->json([
+            'success' => true,
+            'customer' => $customer ?? null
+        ]);
     }
     public function updateByProxy(Request $request, $id)
     {
