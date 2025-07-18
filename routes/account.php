@@ -16,5 +16,5 @@ Route::prefix('profile')->group(function () {
 Route::prefix('plan')->group(function () {
      Route::any('/payout-create', [PlanController::class, 'createByProxy'])->name('payout.create');
      Route::post('/payout-store', [PlanController::class, 'storeByProxy'])->name('payout.store');
-      Route::get('/subscriptions', [PlanController::class, 'subscriptions'])->name('payout.subscriptions');
+     Route::get('/subscriptions', [PlanController::class, 'subscriptions'])->name('payout.subscriptions');
 });
