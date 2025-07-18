@@ -155,7 +155,7 @@ class VendorController extends Controller
                 Log::info('✅ Vendor saved', ['vendor' => $vendor]);
             } else {
                 if (isset($customerResponse['errors'])) {
-                    Log::error('❌ Shopify customer creation failed', $customerResponse['errors']);
+                   Log::error('❌ Shopify customer creation failed', ['errors' => $customerResponse['errors']]);
                     return response()->json([
                         'success' => false,
                         'errors' => $customerResponse['errors']
