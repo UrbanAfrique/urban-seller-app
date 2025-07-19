@@ -1,48 +1,37 @@
-# Use an official PHP 7.4 image with Apache
 FROM php:7.4-apache
 
-# Install required PHP extensions and tools
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
-    zip \
-    unzip \
-    && docker-php-ext-install pdo_mysql gd
+    zip unzip git curl \
+    && docker-php-ext-install pdo pdo_mysql gd
+
+# Install Composer
+COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy Laravel project
+# Copy existing application directory contents
 COPY . .
 
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# Install dependencies
-RUN composer install --no-dev --optimize-autoloader
-
-# Set correct permissions for Laravel storage and bootstrap/cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Enable Apache rewrite module
 RUN a2enmod rewrite
 
-# Set ServerName to suppress Apache warning
+# Set ServerName to avoid Apache startup warnings
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# Configure Apache to serve files from the public directory
-RUN echo "DocumentRoot /var/www/html/public" > /etc/apache2/sites-available/000-default.conf
+# Set Apache to serve the Laravel `public` directory
+RUN sed -i "s|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|" /etc/apache2/sites-available/000-default.conf
 
-# Allow .htaccess overrides
-RUN echo "<Directory /var/www/html/public>" >> /etc/apache2/sites-available/000-default.conf
-RUN echo "    Options Indexes FollowSymLinks" >> /etc/apache2/sites-available/000-default.conf
-RUN echo "    AllowOverride All" >> /etc/apache2/sites-available/000-default.conf
-RUN echo "    Require all granted" >> /etc/apache2/sites-available/000-default.conf
-RUN echo "</Directory>" >> /etc/apache2/sites-available/000-default.conf
-
-# Expose port 80 for Apache
+# Expose port 80
 EXPOSE 80
 
-# Start Apache server
+# Start Apache
 CMD ["apache2-foreground"]
