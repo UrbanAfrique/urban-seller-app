@@ -69,7 +69,6 @@
                     @endif
                 </td>
                 <td class="@if ($listType == 'app') text-center @else w3-center @endif">
-                    {!! \App\Services\ProductService::getStatusHtml($seller, $product, $listType) !!}
                 </td>
                 <td class="@if ($listType == 'app') text-center @else w3-center @endif" id="action_holder">
                     @include('components.products.action', ['listType' => $listType])
