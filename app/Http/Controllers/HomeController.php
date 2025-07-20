@@ -19,6 +19,7 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
+        dd('index');
         $seller = SellerService::getSeller();
         $install = false;
         if (!empty($seller)) {
@@ -76,6 +77,7 @@ class HomeController extends Controller
 
     public function install(Request $request)
     {
+        dd('install');
         $domain = $request->get('shop', null);
         $hMac = $request->get('hmac', null);
         $install_url = "https://" . $domain . "/admin/oauth/authorize?client_id=" . config('services.shopify.api_key') . "&scope=" . trim(config('services.shopify.scopes')) . "&redirect_uri=" . urlencode(route('app.token'));
