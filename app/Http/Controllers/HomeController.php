@@ -19,10 +19,10 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        dd('index');
         $seller = SellerService::getSeller();
         $install = false;
         if (!empty($seller)) {
+            dd('index', $seller);
             $response = ShopifyService::call(
                 $seller->token,
                 $seller->domain,
@@ -38,6 +38,7 @@ class HomeController extends Controller
             }
         }
         if ($seller && !$install) {
+            dd('index 2', $seller);
             WebhookService::manage(
                 $seller->token,
                 $seller->domain,
@@ -64,6 +65,7 @@ class HomeController extends Controller
                 die();
             }
         } else {
+            dd('index 3');
             $domain = $request->query('shop');
             $hmac = $request->query('hmac');
             $timestamp = $request->query('timestamp');
