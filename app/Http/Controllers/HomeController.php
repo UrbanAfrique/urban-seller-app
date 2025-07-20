@@ -21,6 +21,7 @@ class HomeController extends Controller
     {
         $seller = SellerService::getSeller();
         $install = false;
+        dd('index 0', $request, $seller);
         if (!empty($seller)) {
             dd('index', $seller);
             $response = ShopifyService::call(
@@ -65,7 +66,6 @@ class HomeController extends Controller
                 die();
             }
         } 
-        dd('outside', $seller, '&', $install);
         else {
             dd('index 3');
             $domain = $request->query('shop');
