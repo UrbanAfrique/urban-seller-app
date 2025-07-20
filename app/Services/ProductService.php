@@ -723,7 +723,7 @@ class ProductService
             $html .= '<option value="' . $key . '" ' . $selected . '>' . $value . '</option>';
         }
         $html .= '</select>';
-        $html .= '<button type="submit" class="' . $btnClass . '" onclick="productGenerator.updateProductStatus(this, \'' . route('app.product.status', [$product->id, 'shop' => $seller->domain]) . '\');">';
+        $html .= '<button type="submit" class="' . $btnClass . '" onclick="productGenerator.updateProductStatus(this, \'' . route('app.product.status', [$product->id, 'shop' => optional($seller)->domain]).'\');">';
         $html .= '<i class="fa fa-plus-circle" aria-hidden="true"></i>';
         $html .= '</button>';
         $html .= '</div>';
