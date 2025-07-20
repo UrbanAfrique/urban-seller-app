@@ -21,9 +21,9 @@ class HomeController extends Controller
     {
         $seller = SellerService::getSeller();
         $install = false;
-        dd('index 0', $request, $seller);
+        //dd('index 0', $request, $seller);
         if (!empty($seller)) {
-            dd('index', $seller);
+            //dd('index', $seller);
             $response = ShopifyService::call(
                 $seller->token,
                 $seller->domain,
@@ -39,7 +39,7 @@ class HomeController extends Controller
             }
         }
         if ($seller && !$install) {
-            dd('index 2', $seller);
+            //dd('index 2', $seller);
             WebhookService::manage(
                 $seller->token,
                 $seller->domain,
@@ -67,7 +67,7 @@ class HomeController extends Controller
             }
         } 
         else {
-            dd('index 3');
+            //dd('index 3');
             $domain = $request->query('shop');
             $hmac = $request->query('hmac');
             $timestamp = $request->query('timestamp');
@@ -81,7 +81,7 @@ class HomeController extends Controller
 
     public function install(Request $request)
     {
-        dd('install');
+        //dd('install');
         $domain = $request->get('shop', null);
         $hMac = $request->get('hmac', null);
         $install_url = "https://" . $domain . "/admin/oauth/authorize?client_id=" . config('services.shopify.api_key') . "&scope=" . trim(config('services.shopify.scopes')) . "&redirect_uri=" . urlencode(route('app.token'));
