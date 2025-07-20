@@ -64,7 +64,9 @@ class HomeController extends Controller
                 header("Location: " . $return_url);
                 die();
             }
-        } else {
+        } 
+        dd('outside', $seller, '&', $install);
+        else {
             dd('index 3');
             $domain = $request->query('shop');
             $hmac = $request->query('hmac');
