@@ -104,7 +104,7 @@
             }
         };
 
-        let allowedExtensions = ["image/webp"];
+        let allowedExtensions = [];
 
         let fileSelectHandler = function (e) {
             prevent(e);

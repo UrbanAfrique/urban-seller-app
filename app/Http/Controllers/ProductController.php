@@ -97,35 +97,58 @@ class   ProductController extends Controller
     }
 
     public function store(Request $request): JsonResponse
-    {
-        $errors = ProductService::checkErrors();
-        if (count($errors) > 0) {
-            return response()->json([
-                'success' => false,
-                'errors' => $errors
-            ]);
-        } else {
-            $product = ProductService::storeOrUpdate();
-            $finalImages = ProductService::manageProductImages($product, 'create');
-            if (count($finalImages) > 0) {
-                $product->images = json_encode($finalImages['existingImages']);
-                $product->shopify_images = json_encode($finalImages['shopifyImages']);
-                $product->save();
+{
+    $errors = ProductService::checkErrors();
+    if (count($errors) > 0) {
+        return response()->json([
+            'success' => false,
+            'errors' => $errors
+        ]);
+    }
+
+    $product = ProductService::storeOrUpdate();
+
+    // ✅ Convert and store images
+    $convertedImages = [];
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $image) {
+            // Send image to external API
+            $response = Http::attach(
+                'file', file_get_contents($image), $image->getClientOriginalName()
+            )->post('https://image-converter.up.railway.app/convert');
+
+            if ($response->successful()) {
+                $filename = uniqid() . '.webp';
+                Storage::disk('public')->put($filename, $response->body());
+                $convertedImages[] = $filename;
             }
-            //Manage Auto Approval
-            $seller = SellerService::findById($product->seller_id);
-            $setting = SettingService::findBySellerId($seller->id);
-            if ($setting->product_auto_approval) {
-                ProductService::manageApprovedProduct($seller, $product);
-            }
-            return response()->json([
-                'success' => true,
-                'product' => $product,
-                'finalImages' => $finalImages,
-                'successMessage' => 'Product Create Successfully'
-            ]);
         }
     }
+
+    // ⬇️ Now inject convertedImages into ProductService image handling
+    $finalImages = ProductService::manageProductImages($product, 'create', $convertedImages);
+
+    if (count($finalImages) > 0) {
+        $product->images = json_encode($finalImages['existingImages']);
+        $product->shopify_images = json_encode($finalImages['shopifyImages']);
+        $product->save();
+    }
+
+    // ✅ Auto Approval
+    $seller = SellerService::findById($product->seller_id);
+    $setting = SettingService::findBySellerId($seller->id);
+    if ($setting->product_auto_approval) {
+        ProductService::manageApprovedProduct($seller, $product);
+    }
+
+    return response()->json([
+        'success' => true,
+        'product' => $product,
+        'finalImages' => $finalImages,
+        'successMessage' => 'Product Created Successfully'
+    ]);
+}
+
 
     public function update(Request $request, $id): JsonResponse
     {
@@ -135,28 +158,48 @@ class   ProductController extends Controller
                 'success' => false,
                 'errors' => $errors
             ]);
-        } else {
-            $product = ProductService::findById($id);
-            ProductService::removeUpdatedImages($product);
-            $product = ProductService::storeOrUpdate('update', $product);
-            $finalImages = ProductService::manageProductImages($product, 'update');
-            if (count($finalImages) > 0) {
-                $product->images = json_encode($finalImages['existingImages']);
-                $product->shopify_images = json_encode($finalImages['shopifyImages']);
-                $product->save();
-            }
-            //Manage Auto Approval
-            if ($product->approved == ApprovedStatusEnum::APPROVED) {
-                ProductService::updateExistingProduct($product);
-            }
-            return response()->json([
-                'success' => true,
-                'finalImages' => $finalImages,
-                'product' => $product,
-                'successMessage' => 'Product Updated Successfully'
-            ]);
         }
+
+        $product = ProductService::findById($id);
+        ProductService::removeUpdatedImages($product);
+        $product = ProductService::storeOrUpdate('update', $product);
+
+        // ✅ Convert and store new uploaded images
+        $convertedImages = [];
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $response = Http::attach(
+                    'file', file_get_contents($image), $image->getClientOriginalName()
+                )->post('https://image-converter.up.railway.app/convert');
+
+                if ($response->successful()) {
+                    $filename = uniqid() . '.webp';
+                    Storage::disk('public')->put($filename, $response->body());
+                    $convertedImages[] = $filename;
+                }
+            }
+        }
+
+        $finalImages = ProductService::manageProductImages($product, 'update', $convertedImages);
+
+        if (count($finalImages) > 0) {
+            $product->images = json_encode($finalImages['existingImages']);
+            $product->shopify_images = json_encode($finalImages['shopifyImages']);
+            $product->save();
+        }
+
+        if ($product->approved == ApprovedStatusEnum::APPROVED) {
+            ProductService::updateExistingProduct($product);
+        }
+
+        return response()->json([
+            'success' => true,
+            'finalImages' => $finalImages,
+            'product' => $product,
+            'successMessage' => 'Product Updated Successfully'
+        ]);
     }
+
 
     public function show(Request $request, $id)
     {
