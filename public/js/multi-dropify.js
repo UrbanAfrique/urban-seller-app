@@ -104,7 +104,7 @@
             }
         };
 
-        let allowedExtensions = [];
+        let allowedExtensions = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/bmp"];
 
         let fileSelectHandler = function (e) {
             prevent(e);
