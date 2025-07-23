@@ -118,7 +118,7 @@
                 if (!allowedExtensions.includes(file.type)) {
                     $.confirm({
                         title: 'Upload image',
-                        content: 'Only WebP,png,jpeg,gif,bmp files are allowed.',
+                        content: 'Only WebP,Jpeg,png,gif files are allowed.',
                         buttons: {
                             cancel: {
                                 text: 'Cancel',
@@ -146,15 +146,30 @@
                 reader.onload = function (event) {
                     let img = new Image();
                     img.onload = function () {
+                        let maxWidth = 2048; // Max width
+                        let maxHeight = 2048; // Max height
+
+                        if (img.width != maxWidth || img.height != maxHeight) {
+                            $.confirm({
+                                title: 'Upload image',
+                                content: 'Dimensions should not exceed 2048x2048 pixels.',
+                                buttons: {
+                                    cancel: {
+                                        text: 'Cancel',
+                                        action: function () { }
+                                    }
+                                }
+                            });
+                        } else {
                             dataTransfer.items.add(file);
                             $uploadedContainer.find(".m-drop-row").prepend(createImg(URL.createObjectURL(file), dataTransfer.items.length - 1));
                             $input.prop('files', dataTransfer.files);
+                        }
                     };
                     img.src = event.target.result;
                 };
                 reader.readAsDataURL(file);
             });
-
         };
 
         let random = function () {
