@@ -58,38 +58,30 @@ class PlanController extends Controller
             // Step 3: Find customer by ID
             $customer = CustomerService::findById($customerId);
             // Step 4: Create or get Stripe customer
-            $customer->createOrGetStripeCustomer();
-            dd([
-                'step' => 'stripe_customer_created',
-                'stripe_id' => $customer->stripe_id
-            ]);
+            $CUST1 = $customer->createOrGetStripeCustomer();
 
             $paymentMethod = $request->input('paymentMethod');
-            dd([
-                'step' => 'payment_method_received',
-                'paymentMethod' => $paymentMethod
-            ]);
 
             // Step 5: Add payment method
-            $customer->addPaymentMethod($paymentMethod);
-            dd([
-                'step' => 'payment_method_added'
-            ]);
+            $CUST2 =$customer->addPaymentMethod($paymentMethod);
+            
 
             $planId = $request->input('planId');
-            dd([
-                'step' => 'planId_received',
-                'planId' => $planId
-            ]);
+            
 
             // Step 6: Create subscription
-            $customer->newSubscription('default', $planId)
+            $CUST3 = $customer->newSubscription('default', $planId)
                 ->trialDays(180)
                 ->create($paymentMethod, [
                     'email' => $customer->email
                 ]);
             dd([
-                'step' => 'subscription_created'
+                'step' => 'createOrGetStripeCustomer',
+                 '$CUST1' => $CUST1,
+                 'step' => 'payment_method_added',
+                 '$CUST2' => $CUST2,
+                'step2' => 'subscription_created'
+                '$CUST3' => $CUST3
             ]);
 
             // Step 7: Redirect after success
