@@ -57,11 +57,6 @@ class PlanController extends Controller
             $customerId = $request->input('customerId');
             // Step 3: Find customer by ID
             $customer = CustomerService::findById($customerId);
-            dd([
-                'step' => 'customer_lookup',
-                'customer' => $customer
-            ]);
-
             // Step 4: Create or get Stripe customer
             $customer->createOrGetStripeCustomer();
             dd([
