@@ -51,41 +51,68 @@ class PlanController extends Controller
         return response(view('proxy.payout', $data))->header('Content-Type', 'application/liquid');
     }
     
-    public function storeByProxy(Request $request) {
-    try {
-        $paymentMethod = $request->input('paymentMethod');
-        $customerId = $request->input('customerId');
-        $planId = $request->input('planId');
-
-        \Log::info('Payout store request', [
-            'paymentMethod' => $paymentMethod,
-            'customerId' => $customerId,
-            'planId' => $planId
-        ]);
-
-        $customer = CustomerService::findById($customerId);
-        if (!$customer) {
-            \Log::error("Customer not found", ['customerId' => $customerId]);
-            abort(404, 'Customer not found');
-        }
-
-        $customer->createOrGetStripeCustomer();
-        $customer->addPaymentMethod($paymentMethod);
-        $customer->newSubscription('default', $planId)
-            ->trialDays(180)
-            ->create($paymentMethod, [
-                'email' => $customer->email
+        public function storeByProxy(Request $request)
+        {
+            // Step 1: Confirm request reached and see all inputs
+            dd([
+                'step' => 'request_received',
+                'request_data' => $request->all()
             ]);
 
-        return redirect()->to('https://' . $customer->seller->domain . '/a/seller');
-        } catch (\Exception $e) {
-            \Log::error('Error in storeByProxy', [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+            $customerId = $request->input('customerId');
+            // Step 2: Check customerId value
+            dd([
+                'step' => 'got_customerId',
+                'customerId' => $customerId
             ]);
-            abort(500, $e->getMessage());
+
+            // Step 3: Find customer by ID
+            $customer = CustomerService::findById($customerId);
+            dd([
+                'step' => 'customer_lookup',
+                'customer' => $customer
+            ]);
+
+            // Step 4: Create or get Stripe customer
+            $customer->createOrGetStripeCustomer();
+            dd([
+                'step' => 'stripe_customer_created',
+                'stripe_id' => $customer->stripe_id
+            ]);
+
+            $paymentMethod = $request->input('paymentMethod');
+            dd([
+                'step' => 'payment_method_received',
+                'paymentMethod' => $paymentMethod
+            ]);
+
+            // Step 5: Add payment method
+            $customer->addPaymentMethod($paymentMethod);
+            dd([
+                'step' => 'payment_method_added'
+            ]);
+
+            $planId = $request->input('planId');
+            dd([
+                'step' => 'planId_received',
+                'planId' => $planId
+            ]);
+
+            // Step 6: Create subscription
+            $customer->newSubscription('default', $planId)
+                ->trialDays(180)
+                ->create($paymentMethod, [
+                    'email' => $customer->email
+                ]);
+            dd([
+                'step' => 'subscription_created'
+            ]);
+
+            // Step 7: Redirect after success
+            return redirect()->to('https://' . $customer->seller->domain . '/a/seller');
         }
-    }
+
+
 
     
      public function subscriptions(Request $request){
