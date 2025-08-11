@@ -51,56 +51,18 @@ class PlanController extends Controller
         return response(view('proxy.payout', $data))->header('Content-Type', 'application/liquid');
     }
     
-        public function storeByProxy(Request $request)
-        {
-            
-            $customerId = $request->input('customerId');
-            // Step 3: Find customer by ID
-            $customer = CustomerService::findById($customerId);
-            // Step 4: Create or get Stripe customer
-            $CUST1 = $customer->createOrGetStripeCustomer();
-
-            $paymentMethod = $request->input('paymentMethod');
-
-            // Step 5: Add payment method
-            $CUST2 =$customer->addPaymentMethod($paymentMethod);
-            
-
-            $planId = $request->input('planId');
-            
-
-            // Step 6: Create subscription
-            try {
-            $CUST3 = $customer->newSubscription('default', $planId)
-                ->trialDays(180)
-                ->create($paymentMethod, [
-                    'email' => $customer->email
-                ]);
-            } catch (\Exception $e) {
-                dd([
-                    'error' => $e->getMessage(),
-                    'planId' => $planId,
-                    'paymentMethod' => $paymentMethod,
-                    'stripe_id' => $customer->stripe_id,
-                    'email' => $customer->email
-                ]);
-            }
-
-            dd([
-                'step' => 'createOrGetStripeCustomer',
-                 '$CUST1' => $CUST1,
-                 'step' => 'payment_method_added',
-                 '$CUST2' => $CUST2
-                // 'step2' => 'subscription_created',
-                // '$CUST3' => $CUST3
-            ]);
-
-            // Step 7: Redirect after success
-            return redirect()->to('https://' . $customer->seller->domain . '/a/seller');
-        }
-
-
-
+    public function storeByProxy(Request $request){
+        $paymentMethod = $request->input('paymentMethod');
+        $customerId = $request->input('customerId');
+        $planId = $request->input('planId');
+        $customer = CustomerService::findById($customerId);
+        $customer->createOrGetStripeCustomer();
+        $customer->addPaymentMethod($paymentMethod);
+        $customer->newSubscription('default', $planId)->trialDays(180)->create($paymentMethod, [
+               'email' => $customer->email
+        ]);
+        return redirect()->to('https://'.$customer->seller->domain.'/a/seller');
+    }
     
      public function subscriptions(Request $request){
         $data = $this->getProxyData();
