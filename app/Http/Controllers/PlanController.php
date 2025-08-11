@@ -70,11 +70,22 @@ class PlanController extends Controller
             
 
             // Step 6: Create subscription
-            // $CUST3 = $customer->newSubscription('default', $planId)
-            //     ->trialDays(180)
-            //     ->create($paymentMethod, [
-            //         'email' => $customer->email
-            //     ]);
+            try {
+            $CUST3 = $customer->newSubscription('default', $planId)
+                ->trialDays(180)
+                ->create($paymentMethod, [
+                    'email' => $customer->email
+                ]);
+            } catch (\Exception $e) {
+                dd([
+                    'error' => $e->getMessage(),
+                    'planId' => $planId,
+                    'paymentMethod' => $paymentMethod,
+                    'stripe_id' => $customer->stripe_id,
+                    'email' => $customer->email
+                ]);
+            }
+
             dd([
                 'step' => 'createOrGetStripeCustomer',
                  '$CUST1' => $CUST1,
