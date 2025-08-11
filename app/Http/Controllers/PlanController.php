@@ -51,18 +51,42 @@ class PlanController extends Controller
         return response(view('proxy.payout', $data))->header('Content-Type', 'application/liquid');
     }
     
-    public function storeByProxy(Request $request){
+    public function storeByProxy(Request $request) {
+    try {
         $paymentMethod = $request->input('paymentMethod');
         $customerId = $request->input('customerId');
         $planId = $request->input('planId');
+
+        \Log::info('Payout store request', [
+            'paymentMethod' => $paymentMethod,
+            'customerId' => $customerId,
+            'planId' => $planId
+        ]);
+
         $customer = CustomerService::findById($customerId);
+        if (!$customer) {
+            \Log::error("Customer not found", ['customerId' => $customerId]);
+            abort(404, 'Customer not found');
+        }
+
         $customer->createOrGetStripeCustomer();
         $customer->addPaymentMethod($paymentMethod);
-        $customer->newSubscription('default', $planId)->trialDays(180)->create($paymentMethod, [
-               'email' => $customer->email
-        ]);
-        return redirect()->to('https://'.$customer->seller->domain.'/a/seller');
+        $customer->newSubscription('default', $planId)
+            ->trialDays(180)
+            ->create($paymentMethod, [
+                'email' => $customer->email
+            ]);
+
+        return redirect()->to('https://' . $customer->seller->domain . '/a/seller');
+        } catch (\Exception $e) {
+            \Log::error('Error in storeByProxy', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            abort(500, $e->getMessage());
+        }
     }
+
     
      public function subscriptions(Request $request){
         $data = $this->getProxyData();
