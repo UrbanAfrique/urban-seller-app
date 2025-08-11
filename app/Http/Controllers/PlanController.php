@@ -79,9 +79,9 @@ class PlanController extends Controller
                 'step' => 'createOrGetStripeCustomer',
                  '$CUST1' => $CUST1,
                  'step' => 'payment_method_added',
-                 '$CUST2' => $CUST2,
-                'step2' => 'subscription_created',
-                '$CUST3' => $CUST3
+                 '$CUST2' => $CUST2
+                // 'step2' => 'subscription_created',
+                // '$CUST3' => $CUST3
             ]);
 
             // Step 7: Redirect after success
