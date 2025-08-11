@@ -53,19 +53,8 @@ class PlanController extends Controller
     
         public function storeByProxy(Request $request)
         {
-            // Step 1: Confirm request reached and see all inputs
-            dd([
-                'step' => 'request_received',
-                'request_data' => $request->all()
-            ]);
-
+            
             $customerId = $request->input('customerId');
-            // Step 2: Check customerId value
-            dd([
-                'step' => 'got_customerId',
-                'customerId' => $customerId
-            ]);
-
             // Step 3: Find customer by ID
             $customer = CustomerService::findById($customerId);
             dd([
