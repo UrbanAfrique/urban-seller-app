@@ -152,7 +152,7 @@
                         if (img.width != maxWidth || img.height != maxHeight) {
                             $.confirm({
                                 title: 'Upload image',
-                                content: 'Dimensions should not exceed 2048x2048 pixels.',
+                                content: 'Only images of 2048x2048 pixels are accepted.',
                                 buttons: {
                                     cancel: {
                                         text: 'Cancel',
